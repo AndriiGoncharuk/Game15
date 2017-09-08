@@ -31,6 +31,11 @@ void Tile::UpdatePos(uint8_t x, uint8_t y)
     m_TileQML->setProperty("cellY", y);
 }
 
+Tile::~Tile()
+{
+    delete m_TileQML;
+}
+
 uint8_t Tile::GetValue()
 {
     return m_TileQML->property("objectName").toInt();

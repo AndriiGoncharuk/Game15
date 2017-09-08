@@ -3,21 +3,22 @@
 #include "area.h"
 #include "tile.h"
 
-void Area::ClickSlot(int x, int y)
+void Area::clickSlot(int x, int y)
 {
     if ( (((zeroX == x-1)||(zeroX == x+1))&&(zeroY == y)) ||
          (((zeroY == y-1)||(zeroY == y+1))&&(zeroX == x)) ){
         gameArea[zeroX][zeroY] = gameArea[x][y];
         gameArea[zeroX][zeroY]->UpdatePos(zeroY, zeroX);
         zeroX = x; zeroY = y;
-        gameArea[zeroX][zeroY] = NULL;
-        CheckWin();
+        gameArea[zeroX][zeroY] = nullptr;
+        checkWin();
+        QMetaObject::invokeMethod(engine->rootObjects().first()->findChild<QObject*>("ShowHide"), "moveInc");
     }
 }
 
-void Area::RemixSlot()
+void Area::remixSlot()
 {
-    Mix();
+    mix();
 }
 
 Area::Area(QQmlApplicationEngine* engine) : QObject(), engine(engine)
@@ -25,21 +26,33 @@ Area::Area(QQmlApplicationEngine* engine) : QObject(), engine(engine)
     for (int i = 0; i < AREASIZE; ++i) {
         for (int j = 0; j < AREASIZE; ++j) {
             if ((i+1 == AREASIZE) && (j+1 == AREASIZE)) {
-                gameArea[i][j] = NULL;
+                gameArea[i][j] = nullptr;
                 zeroX = i;
                 zeroY = j;
             }
             else {
                 gameArea[i][j] = new Tile(i*AREASIZE + j + 1, AREASIZE, engine);
                 QObject::connect(engine->findChild<QObject*>(QString::number(gameArea[i][j]->GetValue())),
-                                 SIGNAL(mouseClick(int, int)), this, SLOT(ClickSlot(int, int)));
+                                 SIGNAL(mouseClick(int, int)), this, SLOT(clickSlot(int, int)));
             }
         }
     }
-    QObject::connect(engine->rootObjects().first()->findChild<QObject*>("ShowHide"), SIGNAL(mixNow()), this, SLOT(RemixSlot()));
+    QObject::connect(engine->rootObjects().first()->findChild<QObject*>("ShowHide"), SIGNAL(mixNow()), this, SLOT(remixSlot()));
+    show();
 }
 
-void Area::Mix()
+Area::~Area()
+{
+    for (int i = 0; i < AREASIZE; ++i) {
+        for (int j = 0; j < AREASIZE; ++j) {
+            if (gameArea[i][j] != nullptr){
+                delete gameArea[i][j];
+            }
+        }
+    }
+}
+
+void Area::mix()
 {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     for (int i = 0; i < 10000; ++i) {
@@ -47,14 +60,14 @@ void Area::Mix()
             if ((qrand() % 2) == 0) {
                 if (zeroY > 0) {
                     gameArea[zeroX][zeroY] = gameArea[zeroX][zeroY-1];
-                    gameArea[zeroX][zeroY-1] = NULL;
+                    gameArea[zeroX][zeroY-1] = nullptr;
                     zeroY--;
                 }
             }
             else {
                 if (zeroY < AREASIZE-1) {
                     gameArea[zeroX][zeroY] = gameArea[zeroX][zeroY+1];
-                    gameArea[zeroX][zeroY+1] = NULL;
+                    gameArea[zeroX][zeroY+1] = nullptr;
                     zeroY++;
                 }
             }
@@ -64,39 +77,39 @@ void Area::Mix()
             if ((qrand() % 2) == 0) {
                 if (zeroX > 0) {
                     gameArea[zeroX][zeroY] = gameArea[zeroX-1][zeroY];
-                    gameArea[zeroX-1][zeroY] = NULL;
+                    gameArea[zeroX-1][zeroY] = nullptr;
                     zeroX--;
                 }
             }
             else {
                 if (zeroX < AREASIZE-1) {
                     gameArea[zeroX][zeroY] = gameArea[zeroX+1][zeroY];
-                    gameArea[zeroX+1][zeroY] = NULL;
+                    gameArea[zeroX+1][zeroY] = nullptr;
                     zeroX++;
                 }
             }
         }
     }
-    Show();
+    show();
 }
 
-void Area::Show()
+void Area::show()
 {
     for (int i = 0; i < AREASIZE; ++i) {
         for (int j = 0; j < AREASIZE; ++j) {
-            if (gameArea[i][j] != NULL) {
+            if (gameArea[i][j] != nullptr) {
                 gameArea[i][j]->UpdatePos(j, i);
             }
         }
     }
 }
 
-void Area::CheckWin()
+void Area::checkWin()
 {
     bool isWin = true;
     for (int i = 0; i < AREASIZE; ++i) {
         for (int j = 0; j < AREASIZE; ++j) {
-            if (gameArea[i][j] != NULL) {
+            if (gameArea[i][j] != nullptr) {
                 if (!isWin) break;
                 if (gameArea[i][j]->GetValue() != i*AREASIZE + j + 1) {
                     isWin = false;

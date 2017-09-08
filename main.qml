@@ -1,9 +1,13 @@
 import QtQuick 2.6
-import Qt.labs.controls 1.0
+import QtQuick.Controls 1.4
 
 ApplicationWindow {
+    id: applicationWindow
     visible: true
     title: qsTr("Game 15")
+    width: 0
+    height: 0
+    property alias textMoves: textMoves
 
     Image {
         id: background
@@ -21,23 +25,41 @@ ApplicationWindow {
     }
 
     Button {
-        x: parent.width-width-10
-        y: 15
-        text: qsTr("Remix layout")
         width: 140
         height: 50
+        text: qsTr("Remix layout")
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.right: parent.right
+        anchors.rightMargin: 10
 
         onClicked: { itemID.showWin("confirmation", "Remix layout?") }
     }
 
     Button {
-        x: parent.width-width-10
-        y: 15 + 50 + 15
         text: qsTr("Close")
+        anchors.top: parent.top
+        anchors.topMargin: 70
+        anchors.right: parent.right
+        anchors.rightMargin: 10
         width: 140
         height: 50
 
         onClicked: { Qt.quit() }
+    }
+
+    Text {
+        property int moves: 0
+
+        id: textMoves
+        text: qsTr("Moves - " + moves)
+        font.pointSize: 20
+        anchors.top: parent.top
+        anchors.topMargin: 120
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        width: 140
+        height: 50
     }
 
     Item {
@@ -46,9 +68,9 @@ ApplicationWindow {
 
         signal mixNow()
 
-        function hideWin()
+        function moveInc()
         {
-            messageWindow.hide()
+            textMoves.moves++
             return null
         }
 
@@ -70,6 +92,7 @@ ApplicationWindow {
             onSignalRemix:
             {
                 messageWindow.hide()
+                textMoves.moves = 0;
                 itemID.mixNow()
             }
     }

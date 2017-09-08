@@ -1,24 +1,30 @@
 #ifndef AREA_H
 #define AREA_H
 #include "tile.h"
-#define AREASIZE 4
+
+const int AREASIZE = 4;
 
 class Area : public QObject
 {
     Q_OBJECT
-protected:
+
+public slots:
+    void clickSlot(int x, int y);
+    void remixSlot();
+
+private:
     Tile *gameArea[AREASIZE][AREASIZE];
     uint8_t zeroX;
     uint8_t zeroY;
-public slots:
-    void ClickSlot(int x, int y);
-    void RemixSlot();
+    QQmlApplicationEngine* engine;
+
+    void mix();
+    void show();
+    void checkWin();
+
 public:
     Area(QQmlApplicationEngine* engine);
-    void Mix();
-    void Show();
-    void CheckWin();
-    QQmlApplicationEngine* engine;
+    ~Area();
 };
 
 #endif // AREA_H

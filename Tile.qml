@@ -25,12 +25,12 @@ import Qt.labs.controls 1.0
             text: parent.objectName
             font.family: "Times New Roman"
             font.bold: true
-            font.pixelSize: ((parent.height > parent.width) ? parent.width : parent.height) - 2//40
+            font.pixelSize: ((parent.height > parent.width) ? parent.width : parent.height) - 2
             anchors.centerIn: parent
         }
 
-        Behavior on x { PropertyAnimation {duration: 100} }
-        Behavior on y { PropertyAnimation {duration: 100} }
+        Behavior on x { PropertyAnimation { easing.overshoot: 2; easing.type: Easing.InOutBack; duration: 500} }
+        Behavior on y { PropertyAnimation { easing.overshoot: 2; easing.type: Easing.InOutBack; duration: 500} }
 
         MouseArea {
                anchors.fill: parent
