@@ -5,7 +5,6 @@
 
 class Area : public QAbstractListModel{
     Q_OBJECT
-//    Q_PROPERTY(int clickInd READ getClickInd WRITE setClickInd)
 
 public:
     enum TileValues {
@@ -31,9 +30,6 @@ protected:
     uint8_t sizeX;
     uint8_t sizeY;
     int zeroT;
-//    int _clickInd;
-//    int getClickInd() const;
-//    void setClickInd(int val);
 
     void fillArea();
     QHash<int, QByteArray> roleNames() const;

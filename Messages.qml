@@ -3,43 +3,36 @@ import QtQuick.Controls 1.4
 import QtQuick.Window 2.2
 
 Window {
+//    id: messageWindow
     flags: Qt.WindowTitleHint
-    id: messageWindow
-    width: 450
-    height: 100
+
     property alias textID: textID
-    minimumWidth: width
-    maximumWidth: width
-    minimumHeight: height
-    maximumHeight: height
-    visible: false
 
     signal signalDoIt
 
+    width: 450; height: 100
+    minimumWidth: width; minimumHeight: height
+    maximumWidth: width; maximumHeight: height
+    visible: false
+
     Button {
-        x: 10
-        y: textID.height + 15
+        width: 180; height: 50
         text: qsTr("OK")
-        width: 180
-        height: 50
+        anchors {top: parent.top; topMargin: 40; left: parent.left; leftMargin: 10}
         onClicked: { messageWindow.signalDoIt() }
     }
 
     Button {
-        x: 260
-        y: textID.height + 15
+        width: 180; height: 50
         text: qsTr("cancel")
-        width: 180
-        height: 50
+        anchors {top: parent.top; topMargin: 40; right: parent.right; rightMargin: 10}
         onClicked: { messageWindow.hide() }
     }
 
     Text {
         id: textID
-        x: 0
-        y: 0
-        width: parent.width
         height: 25
+        anchors {right: parent.right; left: parent.left; top: parent.top}
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 22
     }

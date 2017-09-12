@@ -2,15 +2,9 @@
 #include <QTime>
 #include "area.h"
 #include "tile.h"
-#include <QDebug>
 
 Area::Area(QObject *parent) : QAbstractListModel(parent) {
-    sizeX = 4;
-    sizeY = 4;
-    zeroT = sizeX*sizeY-1;
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    fillArea();
-    endInsertRows();
+    newSize(4, 4);
 }
 
 void Area::addTile(const Tile &tile) {
@@ -33,17 +27,6 @@ QVariant Area::data(const QModelIndex & index, int role) const {
     return QVariant();
 }
 
-//int Area::getClickInd() const {
-//    return _clickInd;
-//}
-
-//void Area::setClickInd(int val) {
-//    beginMoveRows(QModelIndex(),val,val,QModelIndex(),val-1);
-//    m_tiles.swap(val, val-1);
-//    endMoveRows();
-//    _clickInd = val;
-//}
-
 void Area::fillArea() {
     for (int i = 0; i <= zeroT; ++i)
     {
@@ -62,10 +45,18 @@ void Area::newSize(int newX, int newY) {
 }
 
 bool Area::onClick(int tileIndex) {
-    if (tileIndex-zeroT == 1) {moveTile(tileIndex, zeroT, 1);};
-    if (tileIndex-zeroT == -1) {moveTile(zeroT, tileIndex, -1);};
-    if (tileIndex-zeroT == sizeX) {moveTile(tileIndex, zeroT, sizeX);};
-    if (tileIndex-zeroT == -sizeX) {moveTile(zeroT, tileIndex, -sizeX);};
+    if (tileIndex-zeroT == 1) {
+        moveTile(tileIndex, zeroT, 1);
+    }
+    if (tileIndex-zeroT == -1) {
+        moveTile(zeroT, tileIndex, -1);
+    }
+    if (tileIndex-zeroT == sizeX) {
+        moveTile(tileIndex, zeroT, sizeX);
+    }
+    if (tileIndex-zeroT == -sizeX) {
+        moveTile(zeroT, tileIndex, -sizeX);
+    }
     return checkWin();
 }
 
@@ -83,60 +74,26 @@ void Area::moveTile(int tileIndexFrom, int tileIndexTo, int8_t delta) {
 void Area::mix() {
     qsrand(QDateTime::currentMSecsSinceEpoch() / 1000);
     for (int i = 0; i < 10000; ++i) {
-        if ((qrand() % 2) == 0)
-        {
-            if ((qrand() % 2) == 0)
-            {
-                if (zeroT % sizeX > 0)
-                {
-//                    beginMoveRows(QModelIndex(),zeroT,zeroT,QModelIndex(),zeroT-1);
-//                    m_tiles.swap(zeroT, zeroT-1);
-//                    zeroT--;
-//                    endMoveRows();
-                    qDebug() << zeroT << "left";
+        if ((qrand() % 2) == 0) {
+            if ((qrand() % 2) == 0) {
+                if (zeroT % sizeX > 0) {
                     moveTile(zeroT, zeroT-1,-1);
                 }
             }
-            else
-            {
-                if (zeroT % sizeX < sizeX-1)
-                {
-//                    beginMoveRows(QModelIndex(),zeroT+1,zeroT+1,QModelIndex(),zeroT);
-//                    m_tiles.swap(zeroT, zeroT+1);
-//                    zeroT++;
-//                    endMoveRows();
-                    qDebug() << zeroT << "right";
+            else {
+                if (zeroT % sizeX < sizeX-1) {
                     moveTile(zeroT+1, zeroT,+1);
                 }
             }
         }
-        else
-        {
-            if ((qrand() % 2) == 0)
-            {
-                if (zeroT / sizeX > 0)
-                {
-//                    beginMoveRows(QModelIndex(),zeroT-sizeX,zeroT-sizeX,QModelIndex(),zeroT);
-//                    endMoveRows();
-//                    beginMoveRows(QModelIndex(),zeroT,zeroT,QModelIndex(),zeroT-sizeX);
-//                    m_tiles.swap(zeroT, zeroT-sizeX);
-//                    zeroT -= sizeX;
-//                    endMoveRows();
-                    qDebug() << zeroT << "up";
+        else {
+            if ((qrand() % 2) == 0) {
+                if (zeroT / sizeX > 0) {
                     moveTile(zeroT, zeroT-sizeX,-sizeX);
                 }
             }
-            else
-            {
-                if (zeroT / sizeX < sizeY-1)
-                {
-//                    beginMoveRows(QModelIndex(),zeroT,zeroT,QModelIndex(),zeroT+sizeX);
-//                    endMoveRows();
-//                    beginMoveRows(QModelIndex(),zeroT+sizeX,zeroT+sizeX,QModelIndex(),zeroT);
-//                    m_tiles.swap(zeroT, zeroT+sizeX);
-//                    zeroT += sizeX;
-//                    endMoveRows();
-                    qDebug() << zeroT << "down";
+            else {
+                if (zeroT / sizeX < sizeY-1) {
                     moveTile(zeroT+sizeX, zeroT,+sizeX);
                 }
             }
