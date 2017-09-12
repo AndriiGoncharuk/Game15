@@ -1,28 +1,26 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickView>
+#include <qqmlcontext.h>
 #include "area.h"
-#include "tile.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    Area data_model;
 
-    QObject *rootObject = engine.rootObjects().first();
-    rootObject->setProperty("width", AREASIZE * TILESIZE + 160);
-    rootObject->setProperty("height", AREASIZE * TILESIZE);
-    rootObject->setProperty("minimumWidth", AREASIZE * TILESIZE/2 + 160);
-    rootObject->setProperty("minimumHeight", AREASIZE * TILESIZE/2);
+    QQuickView view;
+    view.setResizeMode(QQuickView::SizeRootObjectToView);
+    QQmlContext *ctxt = view.rootContext();
+    ctxt->setContextProperty("DataModel", &data_model);
 
-    Area *gameArea = new Area(&engine);
+    view.setSource(QUrl(QLatin1String("qrc:/main.qml")));
+    QObject::connect(view.engine(), SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 
     int res = app.exec();
 
-    delete gameArea;
+//    delete data_model;
 
     return res;
 }

@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Window 2.2
 
@@ -12,8 +12,9 @@ Window {
     maximumWidth: width
     minimumHeight: height
     maximumHeight: height
+    visible: false
 
-    signal signalRemix
+    signal signalDoIt
 
     Button {
         x: 10
@@ -21,7 +22,7 @@ Window {
         text: qsTr("OK")
         width: 180
         height: 50
-        onClicked: { messageWindow.signalRemix() }
+        onClicked: { messageWindow.signalDoIt() }
     }
 
     Button {
