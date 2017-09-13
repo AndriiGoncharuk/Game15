@@ -27,18 +27,22 @@ ApplicationWindow {
         source: "qrc:/ResImg/background.png"
 
         Item {
+            id: sidePanel
             width: 160
             anchors {right: parent.right; bottom: parent.bottom; top: parent.top}
 
             Column {
+                id: panel
                 anchors.fill: parent
                 spacing: 10
 
                 GroupBox {
+                    id: setSize
                     width: 140; height: 20
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Rectangle {
+                        id: edtSizeXback
                         width: 30; height: 22
                         color: "#66ffffff"; radius: 4
                         border {width: 1; color: "black"}
@@ -55,6 +59,7 @@ ApplicationWindow {
                     }
 
                     Rectangle {
+                        id: edtSizeYback
                         width: 30; height: 22
                         color: "#66ffffff"; radius: 4
                         border {width: 1; color: "black"}
@@ -71,12 +76,14 @@ ApplicationWindow {
                     }
 
                     Text {
+                        id: textX
                         text: qsTr("X")
                         anchors {left: parent.left; leftMargin: 80; bottom: parent.bottom; bottomMargin: -15}
                         font.pixelSize: 20
                     }
 
                     Text {
+                        id: textSize
                         text: qsTr("Size:")
                         anchors {left: parent.left; leftMargin: -5; bottom: parent.bottom; bottomMargin: -15}
                         font.pixelSize: 20
@@ -91,6 +98,7 @@ ApplicationWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Text {
+                        id: btnNewCaption
                         anchors.centerIn: parent
                         text: "Set size (new game)"
                         horizontalAlignment: Text.AlignHCenter
@@ -118,6 +126,7 @@ ApplicationWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Text {
+                        id: btnRemixCaption
                         anchors.centerIn: parent
                         text: qsTr("Remix layout")
                         horizontalAlignment: Text.AlignHCenter
@@ -148,6 +157,7 @@ ApplicationWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     Text {
+                        id: btnCloseCaption
                         anchors.centerIn: parent
                         text: qsTr("Close")
                         horizontalAlignment: Text.AlignHCenter
@@ -187,26 +197,31 @@ ApplicationWindow {
         height: parent.height
         anchors.top: parent.top
         anchors.left: parent.left
-        cellWidth: width / sizeX
-        cellHeight: height / sizeY
+        cellWidth: (width - 1) / sizeX
+        cellHeight: (height - 1) / sizeY
         enabled: false
         interactive: false
         focus: true;
 
         Rectangle {
-            anchors.fill: parent
+            id: borderGridView
+//            anchors.fill: parent
+            width: parent.width - 1
+            height: parent.height
             color: "#00000000"
             border.color: "black"
         }
 
         model: DataModel
         delegate: Tile {
+            id: tileGridView
             width: areaGrid.cellWidth
             height: areaGrid.cellHeight
             objectName: model.value
             visible: (model.value !== sizeX * sizeY)
 
             MouseArea {
+                id: tileMouseArea
                 anchors.fill: parent
                 onClicked: {
                     if (DataModel.onClick(model.index)) {

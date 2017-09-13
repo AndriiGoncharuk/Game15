@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Window 2.2
 
 Window {
-//    id: messageWindow
+    id: messageWindow
     flags: Qt.WindowTitleHint
 
     property alias textID: textID
@@ -16,6 +16,7 @@ Window {
     visible: false
 
     Button {
+        id: btnOK
         width: 180; height: 50
         text: qsTr("OK")
         anchors {top: parent.top; topMargin: 40; left: parent.left; leftMargin: 10}
@@ -23,6 +24,7 @@ Window {
     }
 
     Button {
+        id: btnCancel
         width: 180; height: 50
         text: qsTr("cancel")
         anchors {top: parent.top; topMargin: 40; right: parent.right; rightMargin: 10}

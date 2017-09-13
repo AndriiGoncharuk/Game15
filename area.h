@@ -21,17 +21,16 @@ public:
     ~Area();
 
 private:
-    QList<Tile> m_tiles;
-
     void moveTile(int tileIndexFrom, int tileIndexTo, int8_t delta);
     bool checkWin();
+    void fillArea();
 
-protected:
+private:
     uint8_t sizeX;
     uint8_t sizeY;
     int zeroT;
 
-    void fillArea();
+    QList<Tile> m_tiles;
     QHash<int, QByteArray> roleNames() const;
 };
 

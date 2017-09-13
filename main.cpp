@@ -7,15 +7,12 @@
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
 
     Area data_model;
 
-    QQuickView view;
-    view.setResizeMode(QQuickView::SizeRootObjectToView);
-    QQmlContext *ctxt = view.rootContext();
-    ctxt->setContextProperty("DataModel", &data_model);
-    view.setSource(QUrl(QLatin1String("qrc:/main.qml")));
-    QObject::connect(view.engine(), SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
+    engine.rootContext()->setContextProperty("DataModel", &data_model);
+    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
     return app.exec();
 }

@@ -15,6 +15,7 @@ Image {
     }
 
     Rectangle {
+        id: borderTile
         anchors.fill: parent
         color: "#00000000"
         radius: ( (height > width) ? width : height ) / 10
